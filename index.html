@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>IKI MANTZ — Director · Editor</title>
+<meta name="description" content="Iki Mantz — Director y Editor audiovisual basado en Buenos Aires. Portfolio de publicidad, videoclips, eventos y documental.">
+<style>
+@font-face { font-family: 'Monotalic'; src: url('fonts/Monotalic-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Monotalic'; src: url('fonts/Monotalic-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root { --bg: #0a0a0a; --white: #ffffff; --font: 'Monotalic', 'Courier New', monospace; --gap: 8px; --pad: 20px; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--bg); color: var(--white); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 16px var(--pad); background: linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.6) 80%, transparent 100%); pointer-events: none; }
+header > * { pointer-events: auto; }
+.logo-block { cursor: pointer; display: flex; align-items: center; }
+.logo-block img { height: 48px; width: auto; display: block; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a { font-family: var(--font); font-size: 12px; font-weight: 400; letter-spacing: 1.5px; text-transform: uppercase; color: var(--white); opacity: 0.65; transition: opacity 0.3s; }
+.nav-links a:hover, .nav-links a.active { opacity: 1; }
+.hamburger { display: none; cursor: pointer; width: 24px; height: 16px; position: relative; z-index: 200; }
+.hamburger span { position: absolute; left: 0; width: 100%; height: 1.5px; background: var(--white); transition: all 0.4s cubic-bezier(0.16,1,0.3,1); }
+.hamburger span:nth-child(1) { top: 0; } .hamburger span:nth-child(2) { top: 50%; } .hamburger span:nth-child(3) { bottom: 0; }
+.hamburger.open span:nth-child(1) { top: 50%; transform: rotate(45deg); } .hamburger.open span:nth-child(2) { opacity: 0; } .hamburger.open span:nth-child(3) { bottom: auto; top: 50%; transform: rotate(-45deg); }
+.mobile-nav { position: fixed; inset: 0; z-index: 150; background: var(--bg); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 32px; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
+.mobile-nav.open { opacity: 1; pointer-events: auto; }
+.mobile-nav a { font-family: var(--font); font-weight: 400; font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: var(--white); }
+.page { display: none; min-height: 100vh; } .page.active { display: block; }
+.hero { position: relative; width: 100%; aspect-ratio: 16 / 7; background: #000; overflow: hidden; }
+.hero video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-info { position: absolute; bottom: 14px; right: var(--pad); z-index: 2; text-align: right; }
+.hero-author { font-family: var(--font); font-weight: 400; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; margin-bottom: 2px; }
+.hero-title { font-family: var(--font); font-weight: 700; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; }
+.mute-btn { position: absolute; bottom: 18px; left: var(--pad); z-index: 2; width: 32px; height: 32px; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0.75; transition: opacity 0.3s; padding: 0; }
+.mute-btn:hover { opacity: 1; } .mute-btn svg { width: 22px; height: 22px; }
+.grid-section { padding: var(--gap) var(--pad); margin-top: var(--gap); }
+.projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+.card { position: relative; overflow: hidden; cursor: pointer; aspect-ratio: 16 / 9.2; background: #111; display: block; transition: transform 0.5s cubic-bezier(0.16,1,0.3,1); transform-origin: center center; }
+.card:hover { transform: scale(1.03); z-index: 2; }
+.card.disabled { cursor: default; } .card.disabled:hover { transform: none; }
+.card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.5s; }
+.card:hover img { filter: brightness(0.7); } .card.disabled:hover img { filter: none; }
+.card-overlay { position: absolute; inset: 0; padding: 14px 16px; display: flex; flex-direction: column; justify-content: flex-end; background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.05) 40%, transparent 100%); pointer-events: none; }
+.card-tag { font-family: var(--font); font-weight: 400; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; margin-bottom: 2px; }
+.card-title { font-family: var(--font); font-weight: 700; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; }
+.bottom-space { height: 140px; }
+.detail-content { max-width: 960px; margin: 0 auto; padding: 100px var(--pad) 80px; }
+.detail-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 40px; }
+.back-btn { display: flex; align-items: center; gap: 6px; font-family: var(--font); font-weight: 400; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); opacity: 0.5; background: none; border: none; cursor: pointer; transition: opacity 0.3s; white-space: nowrap; padding: 0; margin-top: 1px; }
+.back-btn:hover { opacity: 1; } .back-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+.detail-titles { display: flex; flex-direction: column; }
+.detail-tag { font-family: var(--font); font-weight: 400; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; margin-bottom: 2px; }
+.detail-title { font-family: var(--font); font-weight: 700; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; }
+.video-wrap { position: relative; width: 100%; padding-bottom: 56.25%; margin-bottom: 16px; background: #000; }
+.video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.vertical-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.vertical-wrap { position: relative; width: 100%; padding-bottom: 177.78%; background: #000; }
+.vertical-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.about-content { max-width: 960px; margin: 0 auto; padding: 100px var(--pad) 80px; }
+.about-photo { width: 100%; max-width: 500px; aspect-ratio: 3/2; overflow: hidden; margin-bottom: 40px; }
+.about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.about-name { font-family: var(--font); font-weight: 700; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; margin-bottom: 24px; }
+.about-bio { font-family: var(--font); font-weight: 400; font-size: 13px; line-height: 2; color: rgba(255,255,255,0.65); max-width: 640px; margin-bottom: 40px; }
+.about-label { font-family: var(--font); font-weight: 700; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; margin-bottom: 12px; }
+.about-services { font-family: var(--font); font-weight: 400; font-size: 13px; line-height: 2; color: rgba(255,255,255,0.65); }
+.contact-content { max-width: 960px; margin: 0 auto; padding: 100px var(--pad) 80px; display: flex; flex-direction: column; justify-content: center; min-height: 80vh; }
+.contact-title { font-family: var(--font); font-weight: 700; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; color: var(--white); line-height: 1.35; margin-bottom: 40px; }
+.contact-row { display: flex; flex-direction: column; }
+.contact-link { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-top: 1px solid rgba(255,255,255,0.1); font-family: var(--font); font-size: 13px; transition: padding-left 0.3s; }
+.contact-link:last-child { border-bottom: 1px solid rgba(255,255,255,0.1); }
+.contact-link:hover { padding-left: 10px; }
+.contact-link .cl { font-weight: 400; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.3px; }
+.contact-link .cv { font-weight: 400; color: var(--white); }
+@media (max-width: 768px) {
+  header { padding: 14px 16px; } .nav-links { display: none; } .hamburger { display: block; }
+  .logo-block img { height: 36px; } :root { --pad: 10px; --gap: 5px; }
+  .hero { aspect-ratio: 16 / 9; } .projects-grid { grid-template-columns: 1fr; }
+  .card { aspect-ratio: 16 / 9; } .card-title { font-size: 11px; } .card-tag { font-size: 11px; }
+  .detail-content, .about-content, .contact-content { padding: 90px var(--pad) 60px; }
+  .vertical-row { grid-template-columns: repeat(2, 1fr); }
+  .about-photo { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-block" onclick="navigate('home')"><img src="img/logo.png" alt="IKI MANTZ"></div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="navigate('home'); return false;">Proyectos</a></li>
+    <li><a href="#" onclick="navigate('about'); return false;">Sobre mí</a></li>
+    <li><a href="#" onclick="navigate('contact'); return false;">Contacto</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMobile()"><span></span><span></span><span></span></div>
+</header>
+<div class="mobile-nav" id="mobileNav">
+  <a href="#" onclick="navigate('home'); toggleMobile(); return false;">Proyectos</a>
+  <a href="#" onclick="navigate('about'); toggleMobile(); return false;">Sobre mí</a>
+  <a href="#" onclick="navigate('contact'); toggleMobile(); return false;">Contacto</a>
+</div>
+
+<div id="page-home" class="page active">
+  <div class="hero">
+    <video id="heroVideo" autoplay muted loop playsinline preload="auto"><source src="reel.mp4" type="video/mp4"></video>
+    <div class="hero-info"><div class="hero-author">Iki Mantz</div><div class="hero-title">Reel 2026</div></div>
+    <button class="mute-btn" onclick="toggleMute()"><svg id="iconMuted" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 5L6 9H2v6h4l5 4V5z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="23" y1="9" x2="17" y2="15" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="9" x2="23" y2="15" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><svg id="iconUnmuted" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none"><path d="M11 5L6 9H2v6h4l5 4V5z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.54 8.46a5 5 0 010 7.07" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M19.07 4.93a10 10 0 010 14.14" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+  </div>
+  <div class="grid-section"><div class="projects-grid">
+    <a class="card" onclick="navigate('boy-harsher')"><img src="img/BOY_HARSHER_X_INDIE_FOLKS.png" alt="Boy Harsher"><div class="card-overlay"><div class="card-tag">Aftermovie</div><div class="card-title">Boy Harsher x Indie Folks</div></div></a>
+    <a class="card" onclick="navigate('mamba-suite')"><img src="img/MAMBA_SUITE_-_ES_TARDE.png" alt="Mamba Suite"><div class="card-overlay"><div class="card-tag">Videoclip</div><div class="card-title">Mamba Suite — Es Tarde</div></div></a>
+    <a class="card" onclick="navigate('fairtrade-andes')"><img src="img/FAIRTRADE_-_ANDES_WINES.png" alt="Fairtrade Andes"><div class="card-overlay"><div class="card-tag">Comercial</div><div class="card-title">Fairtrade — Andes Wines</div></div></a>
+    <a class="card" onclick="navigate('ciclo-999')"><img src="img/CICLO_999.png" alt="Ciclo 999"><div class="card-overlay"><div class="card-tag">Rave Aftermovie</div><div class="card-title">Ciclo 999</div></div></a>
+    <a class="card" onclick="navigate('nation-indie')"><img src="img/NATION_OF_LENGUAGE_X_INDIE_FOLKS.png" alt="Nation of Language"><div class="card-overlay"><div class="card-tag">Aftermovie</div><div class="card-title">Nation of Language x Indie Folks</div></div></a>
+    <a class="card" onclick="navigate('nicho-engendra')"><img src="img/NICHO_-_ENGENDRA.png" alt="Nicho"><div class="card-overlay"><div class="card-tag">Videoálbum en desarrollo</div><div class="card-title">Nicho — Engendra</div></div></a>
+    <a class="card disabled"><img src="img/GLOW_-_FW25___SS26.png" alt="Glow"><div class="card-overlay"><div class="card-tag">Fashion Films</div><div class="card-title">Glow — FW25 / SS26</div></div></a>
+    <a class="card" onclick="navigate('nutrefeed')"><img src="img/NUTREFEED_-_AL_GANADERO_ARGENTINO.png" alt="Nutrefeed"><div class="card-overlay"><div class="card-tag">Comercial</div><div class="card-title">Nutrefeed — Al Ganadero Argentino</div></div></a>
+    <a class="card disabled"><img src="img/VARESE_EN_NICETO.png" alt="Varese"><div class="card-overlay"><div class="card-tag">Aftermovie</div><div class="card-title">Varese en Niceto</div></div></a>
+    <a class="card" onclick="navigate('ude-momento')"><img src="img/UNIVERSIDAD_DEL_ESTE_-_EL_MOMENTO_ES_TUYO.png" alt="UDE"><div class="card-overlay"><div class="card-tag">Comercial</div><div class="card-title">Universidad del Este — El Momento es Tuyo</div></div></a>
+    <a class="card" onclick="navigate('fairtrade-honey')"><img src="img/FAIRTRADE_-_LATINA_HONEY.png" alt="Fairtrade Honey"><div class="card-overlay"><div class="card-tag">Campaña documental</div><div class="card-title">Fairtrade — Latina Honey</div></div></a>
+    <a class="card" onclick="navigate('el-aguila')"><img src="img/EL_A_GUILA_-_SERVICIO_BAHI_A.png" alt="El Aguila"><div class="card-overlay"><div class="card-tag">Comercial</div><div class="card-title">El Águila — Servicio a Bahía</div></div></a>
+    <a class="card" onclick="navigate('dalinha')"><img src="img/DALINHA.png" alt="Dalinha"><div class="card-overlay"><div class="card-tag">Corto documental</div><div class="card-title">Dalinha</div></div></a>
+    <a class="card" onclick="navigate('ude-tendencias')"><img src="img/UNIVERSIDAD_DEL_ESTE_-_LABORATORIO_DE_TENDENCIAS.png" alt="UDE Tendencias"><div class="card-overlay"><div class="card-tag">Runway Show Aftermovie</div><div class="card-title">Universidad del Este — Laboratorio de Tendencias</div></div></a>
+    <a class="card" onclick="navigate('ariza-martin')"><img src="img/ARIZA_MARTIN_-_BRICKWORKS_SET.png" alt="Ariza Martin"><div class="card-overlay"><div class="card-tag">DJ Set</div><div class="card-title">Ariza Martin — Brickworks Set</div></div></a>
+    <a class="card" onclick="navigate('illusion-budakid')"><img src="img/ILLUSION_PROD__-_BUDAKID_EN_UNO.png" alt="Illusion"><div class="card-overlay"><div class="card-tag">Aftermovie</div><div class="card-title">Illusion Prod. — Budakid en Uno</div></div></a>
+  </div></div>
+  <div class="bottom-space"></div>
+</div>
+
+<div id="page-about" class="page"><div class="about-content">
+  <div class="about-photo"><img src="img/about.jpg" alt="Iki Mantz"></div>
+  <div class="about-name">Iki Mantz</div>
+  <div class="about-bio">Director, editor y productor audiovisual basado en Buenos Aires, Argentina. Formado en la FUC (Fundación Universidad del Cine), con más de diez años de experiencia en publicidad, videoclips, contenido de marca, documentales y cobertura de eventos en vivo.<br><br>Su trabajo combina una mirada cinematográfica con la energía de la escena independiente — desde campañas para Fairtrade, Nutrefeed y Universidad del Este, hasta aftermovies de raves y videoclips de artistas como Nicho, Mamba Suite y Boy Harsher.<br><br>Trabaja tanto en dirección como en edición y postproducción, con un enfoque integral que le permite llevar cada proyecto desde la idea hasta la entrega final.</div>
+  <div class="about-label">Servicios</div>
+  <div class="about-services">Dirección<br>Edición y postproducción<br>Producción audiovisual<br>Contenido para marcas<br>Videoclips<br>Cobertura de eventos<br>Fashion films</div>
+</div></div>
+
+<div id="page-contact" class="page"><div class="contact-content">
+  <div class="contact-title">Contacto</div>
+  <div class="contact-row">
+    <a class="contact-link" href="mailto:qmantz@gmail.com"><span class="cl">Email</span><span class="cv">qmantz@gmail.com</span></a>
+    <a class="contact-link" href="https://wa.me/5492215464644" target="_blank" rel="noopener"><span class="cl">WhatsApp</span><span class="cv">+54 9 221 546 4644</span></a>
+  </div>
+</div></div>
+
+<div id="page-boy-harsher" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Aftermovie</div><div class="detail-title">Boy Harsher x Indie Folks</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/1051325614?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-mamba-suite" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Videoclip</div><div class="detail-title">Mamba Suite — Es Tarde</div></div></div><div class="video-wrap"><iframe src="https://www.youtube.com/embed/QWPuakiiHsg" allow="autoplay; fullscreen" allowfullscreen></iframe></div></div></div>
+<div id="page-fairtrade-andes" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Comercial</div><div class="detail-title">Fairtrade — Andes Wines</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/970140722?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-ciclo-999" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Rave Aftermovie</div><div class="detail-title">Ciclo 999</div></div></div>
+<div class="vertical-row"><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1051318838?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1051316798?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1051314477?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div>
+<div class="vertical-row"><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1051309274?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1009961577?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1009959501?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div>
+<div class="vertical-row"><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1009955959?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1009952707?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="vertical-wrap"><iframe src="https://player.vimeo.com/video/1009950164?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div>
+<div class="video-wrap"><iframe src="https://player.vimeo.com/video/795305844?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/795303293?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/795061455?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/795059728?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/726129574?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/716137147?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/701273774?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/691180462?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/680050159?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/659562410?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/652882845?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/629552438?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/613091297?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/530931368?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+</div></div>
+<div id="page-nation-indie" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Aftermovie</div><div class="detail-title">Nation of Language x Indie Folks</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/1051322941?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-nicho-engendra" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Videoálbum en desarrollo</div><div class="detail-title">Nicho — Engendra</div></div></div><div class="video-wrap"><iframe src="https://www.youtube.com/embed/t6CgpNtSan0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/1049805196?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://www.youtube.com/embed/XHlhNhdG7iM" allow="autoplay; fullscreen" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://www.youtube.com/embed/Fz2ZDcjJ1VA" allow="autoplay; fullscreen" allowfullscreen></iframe></div></div></div>
+<div id="page-nutrefeed" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Comercial</div><div class="detail-title">Nutrefeed — Al Ganadero Argentino</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/1154802621?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-ude-momento" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Comercial</div><div class="detail-title">Universidad del Este — El Momento es Tuyo</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/949978440?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-fairtrade-honey" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Campaña documental</div><div class="detail-title">Fairtrade — Latina Honey</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/718283677?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/718293769?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/718297189?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/718300076?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-el-aguila" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Comercial</div><div class="detail-title">El Águila — Servicio a Bahía</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/1154814230?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-dalinha" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Corto documental</div><div class="detail-title">Dalinha</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/742040821?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-ude-tendencias" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Runway Show Aftermovie</div><div class="detail-title">Universidad del Este — Laboratorio de Tendencias</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/1020317590?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/794332817?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+<div id="page-ariza-martin" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">DJ Set</div><div class="detail-title">Ariza Martin — Brickworks Set</div></div></div><div class="video-wrap"><iframe src="https://www.youtube.com/embed/BcXgpCe9-E0" allow="autoplay; fullscreen" allowfullscreen></iframe></div></div></div>
+<div id="page-illusion-budakid" class="page"><div class="detail-content"><div class="detail-header"><button class="back-btn" onclick="navigate('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button><div class="detail-titles"><div class="detail-tag">Aftermovie</div><div class="detail-title">Illusion Prod. — Budakid en Uno</div></div></div><div class="video-wrap"><iframe src="https://player.vimeo.com/video/773940942?title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div></div></div>
+
+<script>
+var isMuted = true;
+function toggleMute() { var v = document.getElementById('heroVideo'); if (!v) return; isMuted = !isMuted; v.muted = isMuted; document.getElementById('iconMuted').style.display = isMuted ? 'block' : 'none'; document.getElementById('iconUnmuted').style.display = isMuted ? 'none' : 'block'; }
+function toggleMobile() { document.getElementById('hamburger').classList.toggle('open'); document.getElementById('mobileNav').classList.toggle('open'); document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : ''; }
+function navigate(page) { document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); }); var t = document.getElementById('page-' + page); if (t) t.classList.add('active'); window.scrollTo({ top: 0, behavior: 'instant' }); }
+</script>
+</body>
+</html>
